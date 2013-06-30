@@ -3,7 +3,7 @@ Sequent calculus prover for propositional logic
 
 [wikipedia](http://en.wikipedia.org/wiki/Sequent_calculus)
 
-Give the program a sequent of the form 
+Give the program (Prover.rb) a sequent of the form 
 
 proposition, proposition, ... : proposition
 
