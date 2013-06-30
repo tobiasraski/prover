@@ -1,8 +1,6 @@
-prover
+Sequent calculus prover for propositional logic
 ======
 
-# SEQUENT CALCULUS PROVER FOR PROPOSITIONAL LOGIC
-***
 [wikipedia](http://en.wikipedia.org/wiki/Sequent_calculus)
 
 Give the program a sequent of the form 
