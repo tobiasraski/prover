@@ -19,12 +19,12 @@ module Rules
 	end
 
 	def self.axiomrule(sequent)
-		judgement = sequent.judgement
-		if (judgement.is_a? Implication and 
-		    judgement.leftprop.is_a? Falsity and 
-		    judgement.rightprop.is_a? Falsity)
+		conclusion = sequent.conclusion
+		if (conclusion.is_a? Implication and 
+		    conclusion.leftprop.is_a? Falsity and 
+		    conclusion.rightprop.is_a? Falsity)
 		    [[[], :axiom]]
-		elsif (judgement.is_a? Atom and sequent.prop_list.include? judgement)
+		elsif (conclusion.is_a? Atom and sequent.prop_list.include? conclusion)
 			[[[], :axiom]]
 		elsif not sequent.prop_list.select {|x| x.is_a? Falsity}.empty?
 			[[[], :axiom]]
@@ -34,11 +34,11 @@ module Rules
 	end
 	
 	def self.rightimplrule(sequent)
-		judgement = sequent.judgement
-		if (judgement.is_a? Implication)
-			newprop_list = sequent.prop_list + [judgement.leftprop]
-			newjudgement = judgement.rightprop
-			return [[[Sequent.new(newprop_list, newjudgement)], :rightimplrule]]
+		conclusion = sequent.conclusion
+		if (conclusion.is_a? Implication)
+			newprop_list = sequent.prop_list + [conclusion.leftprop]
+			newconclusion = conclusion.rightprop
+			return [[[Sequent.new(newprop_list, newconclusion)], :rightimplrule]]
 		else
 			return []
 		end
@@ -52,7 +52,7 @@ module Rules
 				q = prop.rightprop
 				altered_prop_list = sequent.prop_list - [prop]			
 				new_seq = [Sequent.new(sequent.prop_list, p), 
-						   Sequent.new([q] + altered_prop_list, sequent.judgement)]								
+						   Sequent.new([q] + altered_prop_list, sequent.conclusion)]								
 				seq_list << [new_seq, :leftimplrule]
 			end
 		end
@@ -60,14 +60,14 @@ module Rules
 	end
 	
 	def self.rightconjrule(sequent)
-		judgement = sequent.judgement
-		if ( judgement.is_a? Implication and 
-				  judgement.rightprop.is_a? Falsity and
-				  judgement.leftprop.is_a? Implication and
-				  judgement.leftprop.rightprop.is_a? Implication and
-				  judgement.leftprop.rightprop.rightprop.is_a? Falsity)
-			p = judgement.leftprop.leftprop
-			q = judgement.leftprop.rightprop.leftprop
+		conclusion = sequent.conclusion
+		if ( conclusion.is_a? Implication and 
+				  conclusion.rightprop.is_a? Falsity and
+				  conclusion.leftprop.is_a? Implication and
+				  conclusion.leftprop.rightprop.is_a? Implication and
+				  conclusion.leftprop.rightprop.rightprop.is_a? Falsity)
+			p = conclusion.leftprop.leftprop
+			q = conclusion.leftprop.rightprop.leftprop
 			return [[[Sequent.new(sequent.prop_list, p)], :rightconj], 
 					[[Sequent.new(sequent.prop_list, q)], :rightconj]]
 		 else
@@ -87,18 +87,18 @@ module Rules
 				q = prop.leftprop.rightprop.leftprop
 				altered_prop_list = sequent.prop_list - [prop]
 				seq_list = seq_list + [[Sequent.new([p]+[q]+altered_prop_list, 
-				                          sequent.judgement)], :leftconj]
+				                          sequent.conclusion)], :leftconj]
 			end
 		end
 		seq_list
 	end
 	
 	def self.rightdisjrule(sequent) 
-		if (sequent.judgement.is_a? Implication and
-				  sequent.judgement.leftprop.is_a? Implication and
-				  sequent.judgement.leftprop.rightprop.is_a? Falsity)
-			q = sequent.judgement.rightprop
-			p = sequent.judgement.leftprop.leftprop
+		if (sequent.conclusion.is_a? Implication and
+				  sequent.conclusion.leftprop.is_a? Implication and
+				  sequent.conclusion.leftprop.rightprop.is_a? Falsity)
+			q = sequent.conclusion.rightprop
+			p = sequent.conclusion.leftprop.leftprop
 			return [[[Sequent.new(sequent.prop_list, p)], :rightdisjrule], 
 			        [[Sequent.new(sequent.prop_list, q)], :rightdisjrule]]
 		else
@@ -114,8 +114,8 @@ module Rules
 				prop.leftprop.rightprop.is_a? Falsity)
 				p = prop.leftprop.leftprop
 				q = prop.rightprop
-				newseq = [Sequent.new([p]+sequent.prop_list, sequent.judgement), 
-				          Sequent.new([q]+sequent.prop_list, sequent.judgement)]
+				newseq = [Sequent.new([p]+sequent.prop_list, sequent.conclusion), 
+				          Sequent.new([q]+sequent.prop_list, sequent.conclusion)]
 				seq_list << [newseq, :leftdisjrule]
 			end
 		end

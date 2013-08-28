@@ -1,16 +1,16 @@
 # SEQUENT DEFINITIONS
 # ------------------------
-# A sequent is a list of propisitions (premises) and
-# a judgement (also a proposition)
+# A sequent (judgment) is a list of propositions (premises) and
+# a conclusion (also a proposition)
 
 class Sequent 
-	def initialize(prop_list, judgement)
+	def initialize(prop_list, conclusion)
 		@prop_list = prop_list
-		@judgement = judgement
+		@conclusion = conclusion
 	end
 	
-	def judgement
-		@judgement
+	def conclusion
+		@conclusion
 	end
 	
 	def prop_list
@@ -22,6 +22,6 @@ class Sequent
 		@prop_list.each do |prop|
 			str = str + prop.to_s + ", "
 		end
-		str = str + "|- " + @judgement.to_s
+		str = str + "|- " + @conclusion.to_s
 	end
 end

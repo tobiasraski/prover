@@ -98,19 +98,19 @@ end
 # Comment/uncomment to get desired input
 
 #seq = "a b ->, a : b"         # a -> b, a : b 
-#seq = " : a F -> F -> a ->"  #  : ((a -> F) -> F) -> a, logically the same as (not a) or a
+#seq = " : a F -> F -> a ->"  #  : ((a -> F) -> F) -> a, the same as (not a) or a
 seq = "a b ->, b c a -> -> , a : c a ->"
 #seq = " b : a F -> F -> b ->"
 #seq = gets
 
-judgement = createfromstring(seq.split(":")[1])
+conclusion = createfromstring(seq.split(":")[1])
 seq_strings = seq.split(":")[0].strip
 if (seq_strings == "")
 	prop_list = []
 else
 	prop_list = seq_strings.split(",").collect {|prop| createfromstring(prop)}
 end
-sequent = Sequent.new(prop_list, judgement)
+sequent = Sequent.new(prop_list, conclusion)
 allowed_depth = 12
 prover = Prover.new
 puts "Trying to prove " + sequent.to_s
